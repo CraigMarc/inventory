@@ -10,7 +10,7 @@ const ItemSchema = new Schema({
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
 });
 
-// Virtual for author's URL
+// Virtual for item URL
 ItemSchema.virtual("url").get(function () {
   // We don't use an arrow function as we'll need the this object
   return `/item/${this._id}`;
