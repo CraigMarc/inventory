@@ -15,16 +15,12 @@ exports.index = asyncHandler(async (req, res, next) => {
 });
 
 // Display list of all Categories.
-/*
-exports.category_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Category list");
-});*/
+
 exports.category_list = asyncHandler(async (req, res, next) => {
   const allCategories = await Category.find({}, "name")
-    .sort({ title: 1 })
+    .sort({ name: 1 })
     .populate("description")
     .exec();
-console.log(allCategories)
   res.render("category_list", { title: "Category List", category_list: allCategories });
 });
 
