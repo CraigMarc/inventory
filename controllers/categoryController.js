@@ -1,8 +1,17 @@
 const Category = require("../models/category");
+const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
-
+/*
 exports.index = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: Site Home Page");
+});*/
+//homepage
+exports.index = asyncHandler(async (req, res, next) => {
+  
+  res.render("index", {
+    title: "Bike Shop Inventory Home",
+    
+  });
 });
 
 // Display list of all Categories.

@@ -4,8 +4,7 @@ const router = express.Router();
 // Require controller modules.
 const category_controller = require("../controllers/categoryController");
 const item_controller = require("../controllers/itemController");
-//const genre_controller = require("../controllers/genreController");
-//const category_instance_controller = require("../controllers/categoryinstanceController");
+
 
 /// BOOK ROUTES ///
 
@@ -61,75 +60,5 @@ router.get("/item/:id", item_controller.item_detail);
 
 // GET request for list of all Items.
 router.get("/items", item_controller.item_list);
-/*
-/// GENRE ROUTES ///
 
-// GET request for creating a Genre. NOTE This must come before route that displays Genre (uses id).
-router.get("/genre/create", genre_controller.genre_create_get);
-
-//POST request for creating Genre.
-router.post("/genre/create", genre_controller.genre_create_post);
-
-// GET request to delete Genre.
-router.get("/genre/:id/delete", genre_controller.genre_delete_get);
-
-// POST request to delete Genre.
-router.post("/genre/:id/delete", genre_controller.genre_delete_post);
-
-// GET request to update Genre.
-router.get("/genre/:id/update", genre_controller.genre_update_get);
-
-// POST request to update Genre.
-router.post("/genre/:id/update", genre_controller.genre_update_post);
-
-// GET request for one Genre.
-router.get("/genre/:id", genre_controller.genre_detail);
-
-// GET request for list of all Genre.
-router.get("/genres", genre_controller.genre_list);
-
-/// BOOKINSTANCE ROUTES ///
-
-// GET request for creating a BookInstance. NOTE This must come before route that displays BookInstance (uses id).
-router.get(
-  "/categoryinstance/create",
-  category_instance_controller.categoryinstance_create_get,
-);
-
-// POST request for creating BookInstance.
-router.post(
-  "/categoryinstance/create",
-  category_instance_controller.categoryinstance_create_post,
-);
-
-// GET request to delete BookInstance.
-router.get(
-  "/categoryinstance/:id/delete",
-  category_instance_controller.categoryinstance_delete_get,
-);
-
-// POST request to delete BookInstance.
-router.post(
-  "/categoryinstance/:id/delete",
-  category_instance_controller.categoryinstance_delete_post,
-);
-
-// GET request to update BookInstance.
-router.get(
-  "/categoryinstance/:id/update",
-  category_instance_controller.categoryinstance_update_get,
-);
-
-// POST request to update BookInstance.
-router.post(
-  "/categoryinstance/:id/update",
-  category_instance_controller.categoryinstance_update_post,
-);
-
-// GET request for one BookInstance.
-router.get("/categoryinstance/:id", category_instance_controller.categoryinstance_detail);
-
-// GET request for list of all BookInstance.
-router.get("/categoryinstances", category_instance_controller.categoryinstance_list);
-*/
 module.exports = router;
