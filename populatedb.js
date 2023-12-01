@@ -28,10 +28,10 @@ console.log(
     console.log("Debug: About to connect");
     await mongoose.connect(mongoDB);
     console.log("Debug: Should be connected?");
-    await createGenres();
-    await createAuthors();
-    await createBooks();
-    await createBookInstances();
+    await createCategory();
+    await createItems();
+   // await createBooks();
+   // await createBookInstances();
     console.log("Debug: Closing mongoose");
     mongoose.connection.close();
   }
@@ -68,7 +68,7 @@ console.log(
     
   
     const category = new Category(itemdetail);
-    await Category.save();
+    await category.save();
     categories[index] = category;
     console.log(`Added category: ${name}`);
   }
@@ -128,51 +128,51 @@ console.log(
       itemCreate(0,
         "Trek Fuel EX 5 Deore Gen 5",
         "Fuel EX 5 is the gateway to full suspension trail bikes. Trail-taming front and rear suspension, a Shimano 1x12 drivetrain, a dropper post for getting low on descents, and hydraulic disc brakes make Fuel EX 5 a high-value, high-performance mountain bike with exceptional versatility.",
-        2,099.99,
+        2099.99,
         6,
-        [categories[0]]
+        categories[0]
       ),
       itemCreate(1,
         "Trek Roscoe 7",
         "Roscoe 7 is a hardtail for riders who wanna have a blast ripping up the trail. A plush 140mm suspension fork, 29er wheels, and a wide-range drivetrain with plenty of gears make this bike great for new riders yet playful enough to make even the most experienced shredders smile.",
-        1,349.99,
+        1349.99,
         5,
-        [categories[0]]
+        categories[0]
       ),
       itemCreate(2,
         "Shimano GRX RX400 Hydraulic Disc Brake",
         "With a low-profile Flat Mount design, the Shimano GRX BR-RX400 hydraulic disc brakes provide greater control for mixed terrain riding.",
         54.99,
         10,
-        [categories[1]]
+        categories[1]
       ),
       itemCreate(3,
         "Shimano GRX RX812 11-Speed Rear Derailleur",
         "With an integrated chain stabilizer mechanism, the Shimano GRX derailleur provides a quieter experience with shifting security and precision on mixed terrain. For rides on smooth surfaces, the derailleur features and ON/OFF switch for the chain stabilizer. The RD-RX812 rear derailleur is compatible with MTB cassettes with a max cog size of 42T.",
         119.99,
         6,
-        [categories[1]]
+        categories[1]
       ),
       itemCreate(4,
         "RockShox Deluxe Ultimate Rear Shock",
         "A perfect match for the current crop of ultra-lightweight and capable dream bikes, Deluxe Ultimate offers a fully checked damper design allowing for a Low Speed Compression adjustment and optimal traction control tuning. It also features Maxima Plush fluid for added performance and ride quality so you can go on and shred to your heart’s content.",
         407.00,
         3,
-        [categories[1]]
+        categories[1]
       ),
       itemCreate(5,
-        "Cannondale Dirt Mini Pump",
-        "Stay pumped. Packed with clever features that prioritize convenience and functionality, and gets large volume off-road tires to the correct pressures quickly.",
-        48.00,
-        6,
-        [categories[3]]
+        "Bontrager Comp Shift Cable",
+        "Rejuvenate the performance of your drivetrain with this convenient and valuable cable.",
+        7.00,
+        16,
+        categories[2]
       ),
       itemCreate(6,
         "Bontrager Bontrager Circuit Twin Gel Cycling Glove",
         "A versatile bike glove with optimized gel and gel foam padding for all-day comfort.",
         15.99,
         12,
-        [categories[3]]
+        categories[3]
       ),
     ]);
   }
