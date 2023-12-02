@@ -2,6 +2,10 @@ extends layout
 
 block content
 
-  h1 Category: #{name}
-  
+  h1 Item: #{item.name}
+
+  p #{item.description}
+  p price: $#{item.price}
+  p quantity in stock: #{item.number}
+  p category: #{item.category.name}
    

@@ -37,7 +37,7 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
-  
+  console.log(category.name)
   res.render("category_detail", {
     title: "Category Detail",
     category: category,

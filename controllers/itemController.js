@@ -20,12 +20,12 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
 
 exports.item_detail = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
-  const item = await Promise.all([
+  const [item] = await Promise.all([
     Item.findById(req.params.id)
     .populate('category')
-    .exec(),
-    
+    .exec()
   ]);
+  console.log(item.name)
 
   if (item === null) {
     // No results.
@@ -33,10 +33,10 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
-  console.log(item.name)
+  
   res.render("item_detail", {
     title: "Item Detail",
-    name: item,
+    item: item,
     
   });
 });
