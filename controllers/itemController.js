@@ -13,8 +13,32 @@ exports.item_list = asyncHandler(async (req, res, next) => {
 });
 
 // Display detail page for a specific Item.
+/*
 exports.item_detail = asyncHandler(async (req, res, next) => {
   res.send(`NOT IMPLEMENTED: Item detail: ${req.params.id}`);
+});*/
+
+exports.item_detail = asyncHandler(async (req, res, next) => {
+  // Get details of author and all their books (in parallel)
+  const item = await Promise.all([
+    Item.findById(req.params.id)
+    .populate('category')
+    .exec(),
+    
+  ]);
+
+  if (item === null) {
+    // No results.
+    const err = new Error("Item not found");
+    err.status = 404;
+    return next(err);
+  }
+  console.log(item)
+  res.render("item_detail", {
+    //title: "Item Detail",
+    item: item,
+    
+  });
 });
 
 // Display Item create form on GET.
