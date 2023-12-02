@@ -33,10 +33,10 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
     err.status = 404;
     return next(err);
   }
-  console.log(item)
+  console.log(item.name)
   res.render("item_detail", {
-    //title: "Item Detail",
-    item: item,
+    title: "Item Detail",
+    name: item,
     
   });
 });
