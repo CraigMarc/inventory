@@ -38,23 +38,19 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
 });
 
 // Display Item create form on GET.
-/*
-exports.item_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Item create GET");
-});*/
 
 exports.item_create_get = asyncHandler(async (req, res, next) => {
 
   const allCategories = await Category.find()
     .sort({ name: 1 })
     .exec();
-console.log(allCategories)
-  
+
+
 
   res.render("item_form", {
     title: "Create Item",
     categories: allCategories,
-    
+
   });
 });
 
@@ -95,7 +91,7 @@ exports.item_create_post = [
     .withMessage("Number must be specified.")
     .isFloat({ min: 1 })
     .withMessage("Number must be a number."),
-    body("category")
+  body("category")
     .trim()
     .isLength({ min: 1 })
     .escape()
@@ -121,9 +117,15 @@ exports.item_create_post = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      res.render("category_form", {
+
+      const allCategories = await Category.find()
+        .sort({ name: 1 })
+        .exec();
+
+      res.render("item_form", {
         title: "Create Item",
         item: item,
+        categories: allCategories,
         errors: errors.array(),
       });
       return;
