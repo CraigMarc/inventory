@@ -112,11 +112,6 @@ exports.category_create_post = [
 ];
 
 // Display Category delete form on GET.
-/*
-exports.category_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Category delete GET");
-  
-});*/
 
 // Display Author delete form on GET.
 exports.category_delete_get = asyncHandler(async (req, res, next) => {
@@ -139,17 +134,16 @@ exports.category_delete_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle Category delete on POST.
-/*
-exports.category_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Category delete POST");
-});*/
 
 exports.category_delete_post = asyncHandler(async (req, res, next) => {
   // Get category and all their items (in parallel)
+  
   const [category, allItemsInCategory] = await Promise.all([
     Category.findById(req.params.id).exec(),
     Item.find({ category: req.params.id }, "name description").exec(),
   ]);
+
+ 
 
   if (allItemsInCategory.length > 0) {
     // Author has books. Render in same way as for GET route.
@@ -167,11 +161,100 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 // Display Category update form on GET.
+
 exports.category_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Category update GET");
+  // Get details of category and all their items (in parallel)
+  
+  const category = await Category.findById(req.params.id)
+    .exec();
+
+  if (category === null) {
+    // No results.
+    const err = new Error("Category not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("category_form", {
+    title: "Update Category",
+    category: category,
+    
+    
+  });
 });
 
 // Handle Category update on POST.
+/*
 exports.category_update_post = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED Category update POST");
-});
+});*/
+
+exports.category_update_post = [
+  
+
+  // Validate and sanitize fields.
+  body("name")
+  .trim()
+  .isLength({ min: 1 })
+  .escape()
+  .withMessage("Category name must be specified.")
+  .isAlphanumeric()
+  .withMessage("Category name has non-alphanumeric characters."),
+body("description")
+  .trim()
+  .isLength({ min: 1 })
+  .escape()
+  .withMessage("Description must be specified.")
+  .isAlphanumeric()
+  .withMessage("Description has non-alphanumeric characters."),
+
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a Book object with escaped/trimmed data and old id.
+    /*
+    const book = new Book({
+      title: req.body.title,
+      author: req.body.author,
+      summary: req.body.summary,
+      isbn: req.body.isbn,
+      genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
+      _id: req.params.id, // This is required, or a new ID will be assigned!
+    });*/
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+      _id: req.params.id
+    });
+
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+
+      // Get all authors and genres for form
+      /*
+      const [allAuthors, allGenres] = await Promise.all([
+        Author.find().sort({ family_name: 1 }).exec(),
+        Genre.find().sort({ name: 1 }).exec(),
+      ]);*/
+      const category = await Category.findById(req.params.id)
+    .exec();
+
+      
+    res.render("category_form", {
+      title: "Update Category",
+      category: category,
+      errors: errors.array()
+      
+    });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      const updatedCatagory = await Category.findByIdAndUpdate(req.params.id, category, {});
+      // Redirect to book detail page.
+      res.redirect(updatedCatagory.url);
+    }
+  }),
+];

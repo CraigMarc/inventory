@@ -15,7 +15,7 @@ block content
       dl
       each item in category_items
         dt
-          a(href=book.url) #{item.title}
+          a(href=item.url) #{item.name}
         dd #{item.summary}
 
   else
