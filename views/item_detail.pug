@@ -8,4 +8,7 @@ block content
   p price: $#{item.price}
   p quantity in stock: #{item.number}
   p category: #{item.category.name}
-   
+  
+  hr
+  p 
+    a(href=item.url+'/delete') Delete Item
