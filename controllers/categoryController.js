@@ -25,7 +25,7 @@ exports.category_list = asyncHandler(async (req, res, next) => {
 // Display detail page for a specific Category.
 
 exports.category_detail = asyncHandler(async (req, res, next) => {
-  // Get details of author and all their books (in parallel)
+  // Get details of category and all their items (in parallel)
   const [category, allCategoryItems] = await Promise.all([
     Category.findById(req.params.id).exec(),
     Item.find({ category: req.params.id }, "name description").exec(),
