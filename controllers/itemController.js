@@ -55,10 +55,7 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle Item create on POST.
-/*
-exports.item_create_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Item create POST");
-});*/
+
 
 exports.item_create_post = [
   // Validate and sanitize the name field.
@@ -105,7 +102,7 @@ exports.item_create_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create a category object with escaped and trimmed data.
+    // Create a item object with escaped and trimmed data.
     const item = new Item({
       name: req.body.name,
       description: req.body.description,
@@ -147,11 +144,7 @@ exports.item_create_post = [
 
 
 // Display Item delete form on GET.
-/*
-exports.item_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Item delete GET");
 
-});*/
 
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
   const item = await Item.findById(req.params.id)
@@ -172,10 +165,7 @@ exports.item_delete_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle Item delete on POST.
-/*
-exports.item_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Item delete POST");
-});*/
+
 
 exports.item_delete_post = asyncHandler(async (req, res, next) => {
   const item = await Item.findById(req.params.id)
@@ -196,11 +186,116 @@ exports.item_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 // Display Item update form on GET.
+
+
 exports.item_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Item update GET");
+  // Get details of category and all their items (in parallel)
+  
+  const item = await Item.findById(req.params.id)
+    .populate("category")
+    .exec();
+
+  if (item === null) {
+    // No results.
+    const err = new Error("Item not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  const allCategories = await Category.find()
+    .sort({ name: 1 })
+    .exec();
+
+
+  res.render("item_form", {
+    title: "Update Item",
+    categories: allCategories,
+    item: item
+  });
 });
 
+
 // Handle Item update on POST.
-exports.item_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED Item update POST");
-});
+
+
+exports.item_update_post = [
+  
+
+  // Validate and sanitize fields.
+  body("name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Category name must be specified.")
+    .isAlphanumeric()
+    .withMessage("Category name has non-alphanumeric characters."),
+  body("description")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Description must be specified.")
+    .isAlphanumeric()
+    .withMessage("Description has non-alphanumeric characters."),
+  body("price")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Price must be specified.")
+    .isFloat({ min: 1 })
+    .withMessage("Price must be a number."),
+  body("number")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Number must be specified.")
+    .isFloat({ min: 1 })
+    .withMessage("Number must be a number."),
+  body("category")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Category must be specified.")
+    .isAlphanumeric()
+    .withMessage("Category has non-alphanumeric characters."),
+
+
+
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a Book object with escaped/trimmed data and old id.
+    
+
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      number: req.body.number,
+      category: req.body.category,
+      _id: req.params.id
+    });
+
+
+    if (!errors.isEmpty()) {
+     
+      const allCategories = await Category.find()
+      .sort({ name: 1 })
+      .exec();
+
+    res.render("item_form", {
+      title: "Update Item",
+      item: item,
+      categories: allCategories,
+      errors: errors.array(),
+    });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      const updatedItem = await Item.findByIdAndUpdate(req.params.id, item, {});
+      // Redirect to category detail page.
+      res.redirect(updatedItem.url);
+    }
+  }),
+];

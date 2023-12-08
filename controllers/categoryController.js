@@ -184,10 +184,7 @@ exports.category_update_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle Category update on POST.
-/*
-exports.category_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED Category update POST");
-});*/
+
 
 exports.category_update_post = [
   
@@ -214,15 +211,7 @@ body("description")
     const errors = validationResult(req);
 
     // Create a Book object with escaped/trimmed data and old id.
-    /*
-    const book = new Book({
-      title: req.body.title,
-      author: req.body.author,
-      summary: req.body.summary,
-      isbn: req.body.isbn,
-      genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
-      _id: req.params.id, // This is required, or a new ID will be assigned!
-    });*/
+    
     const category = new Category({
       name: req.body.name,
       description: req.body.description,
@@ -231,14 +220,7 @@ body("description")
 
 
     if (!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values/error messages.
-
-      // Get all authors and genres for form
-      /*
-      const [allAuthors, allGenres] = await Promise.all([
-        Author.find().sort({ family_name: 1 }).exec(),
-        Genre.find().sort({ name: 1 }).exec(),
-      ]);*/
+     
       const category = await Category.findById(req.params.id)
     .exec();
 
@@ -253,7 +235,7 @@ body("description")
     } else {
       // Data from form is valid. Update the record.
       const updatedCatagory = await Category.findByIdAndUpdate(req.params.id, category, {});
-      // Redirect to book detail page.
+      // Redirect to category detail page.
       res.redirect(updatedCatagory.url);
     }
   }),
